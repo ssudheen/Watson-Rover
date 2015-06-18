@@ -1,0 +1,29 @@
+john bit light ted session
+The system has: 1 sessions. b135bc493e3aae2cb78170c8bc2b5a2c
+Received transcript: thunder storms could produce large hail isolated tornadoes and heavy rain 
+Closing session
+Session deleted
+Testing...
+created session
+The system has: 1 sessions. cdf7799e29b46b3c055ab427ef2426cf
+Received transcript: thunder storms could produce large hail isolated tornadoes and heavy rain 
+Closing session
+Session deleted
+Testing...
+created session
+The system has: 1 sessions. d28edd141c556256d5c11c4ce746ec66
+Received transcript: lawyers for the plaintiffs said the settlements were the biggest yet 
+Closing session
+Session deleted
+Testing...
+created session
+The system has: 1 sessions. 45c40619b9f925324264633c307b62ad
+Received transcript: lawyers for the plaintiffs said the settlements were the biggest yet 
+Closing session
+Session deleted
+Testing...
+created session
+The system has: 1 sessions. 2355f938dddf70bf6bccc475daafec4e
+Received transcript: lawyers for the plaintiffs said the settlements were the biggest yet 
+Closing session
+Session deleted
