@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 2.8)
+project( SearchPattern )
+find_package( OpenCV REQUIRED )
+add_executable( search_patternv0.1 search_patternv0.1.cpp )
+target_link_libraries( search_patternv0.1 ${OpenCV_LIBS} )
