@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 2.8)
+project( ExtractImage )
+find_package( OpenCV REQUIRED )
+add_executable( VR_image_extraction_v0.3 VR_image_extraction_v0.3.cpp )
+target_link_libraries( VR_image_extraction_v0.3 ${OpenCV_LIBS} )
