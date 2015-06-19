@@ -16,7 +16,7 @@
 
 ## Getting Started
 
-  General instructions can be found [/documentation/installation_v0.2.pdf here].
+  General instructions can be found [here](https://github.com/ssudheen/Watson-Rover/raw/master/documentation/install-v1.pdf).
   In order to run the project you will have to copy the credentials to use the  Watson services.
   1. In `RasPi/VR/VR_watson_analysis_v0.3.js` update Visual Recongnition credentials.
   2. In `Bbone/S2T_Rover/voice_control.js` update the Speech-to-text service credentials.
