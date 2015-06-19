@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  *
  * Modified by Sayan A Ghosh (sayan.ghosh@in.ibm.com) to support development
  * of a voice control for the Rover Project entered into the
@@ -28,9 +28,8 @@ var fs = require('fs');
 
 // if bluemix credentials exists, then override local
 var credentials = extend({
-  url: 'https://stream.watsonplatform.net/speech-to-text-beta/api',
-  username: 'b823d1f4-7538-4838-b2e7-40300adbd1fd',
-  password: '5VmPqpN6jzGe'
+  username: '<username>',
+  password: '<password>'
 }, bluemix.getServiceCreds('speech_to_text')); // VCAP_SERVICES
 
 
@@ -40,46 +39,42 @@ var speechToText = new SpeechToText(credentials);
 console.log('Testing...');
 var sessions = [];
 //console.log(speechToText.create_session({}, function (err, session) {
-speechToText.create_session({}, function (err, session) {
-	if (err){
-		next(new Error('The server could not create a session'));
-		}
-	else
-		{
-		sessions[0] = session;
-		console.log('created session');	
-		console.log('The system has:', sessions.length, 'sessions.',sessions[0].session_id);
-		}
-	});
+speechToText.create_session({}, function(err, session) {
+  if (err) {
+    console.log('The server could not create a session');
+  } else {
+    sessions[0] = session;
+    console.log('created session');
+    console.log('The system has:', sessions.length, 'sessions.', sessions[0].session_id);
+  }
+});
 
 var audio = fs.createReadStream(process.argv[2]);
-var fdoptions = {flags: 'a+'};
-var transcript = fs.createWriteStream(process.argv[3],fdoptions);
-speechToText.recognize({audio: audio}, function(err, response){
-	if (err)
-		console.log('500 - Error');
-	else
-		{
-		console.log('Transcript:', response);	
-		if (typeof(response.results[0]) != 'undefined')
-			{	
-			console.log('Received transcript:', response.results[0].alternatives[0].transcript);
-			transcript.write(response.results[0].alternatives[0].transcript+'\n');
-			}
-		else
-			{
-			console.log('Cannot convert');
-			}
-		}
-	ShutDownSession(sessions[0]);
-	delete sessions[0];
-	});
+var fdoptions = { flags: 'a+' };
+
+var transcript = fs.createWriteStream(process.argv[3], fdoptions);
+speechToText.recognize({
+  audio: audio
+}, function(err, response) {
+  if (err)
+    console.log('500 - Error');
+  else {
+    console.log('Transcript:', response);
+    if (typeof(response.results[0]) !== 'undefined') {
+      console.log('Received transcript:', response.results[0].alternatives[0].transcript);
+      transcript.write(response.results[0].alternatives[0].transcript + '\n');
+    } else {
+      console.log('Cannot convert');
+    }
+  }
+  shutDownSession(sessions[0]);
+  delete sessions[0];
+});
 
 
-function ShutDownSession(session)
-{
-	console.log('Closing session');
-	speechToText.delete_session(session, function(){
-		console.log('Session deleted');
-		});
-};
+function shutDownSession(session) {
+  console.log('Closing session');
+  speechToText.delete_session(session, function() {
+    console.log('Session deleted');
+  });
+}

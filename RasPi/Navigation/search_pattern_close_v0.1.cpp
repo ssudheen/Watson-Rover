@@ -19,11 +19,11 @@ int main( int argc, char** argv )
 {
 	float distance = 0;
 	distance = atof(argv[1]);
-	dist = distance; 
+	dist = distance;
 	/// Load image and template
 	img = imread( "tempImg.jpg", 1 );
 	templ = imread( "template_close.jpg", 1 );
-	
+
 	if (distance == 3) {
 		resize(templ, templ_rsz, Size(), 0.4, 0.4);
 	}
@@ -40,7 +40,7 @@ int main( int argc, char** argv )
 		resize(templ, templ_rsz, Size(), 1.0, 1.0);
 	}
 	else return(-1);
-	
+
 	MatchingMethod( 0, 0 );
 	return 0;
 }
@@ -54,11 +54,11 @@ void MatchingMethod( int, void* )
 	Mat result;
 	FILE *fp;
 	char buff[20];
-	
+
 	/// Create the result matrix
 	int result_cols =  img.cols - templ.cols + 1;
 	int result_rows = img.rows - templ.rows + 1;
-	
+
 	result.create( result_rows, result_cols, CV_32FC1 );
 
 	/// Do the Matching and Normalize
@@ -72,7 +72,7 @@ void MatchingMethod( int, void* )
 	minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, Mat() );
 
 	matchLoc = maxLoc;
-	
+
 	fp=fopen("image_search_op.txt", "w");
 	if (maxVal > 0.7) {
 		sprintf(buff, "%d,%d,%1.1f", matchLoc.x, matchLoc.y, dist);
@@ -80,11 +80,9 @@ void MatchingMethod( int, void* )
 	else {
 		sprintf(buff, "-1");
 	}
-	
-	fprintf(fp, buff); 
+
+	fprintf(fp, buff);
 	fclose(fp);
-	
-	//printf("x = %d\n", matchLoc.x);
-	//printf("y = %d\n", matchLoc.y);
+
 	return;
 }

@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/watson-developer-cloud/speech-to-text-nodejs.git"
+    "url": "https://github.com/ssudheen/Watson-Rover.git"
   },
   "author": "IBM Corp.",
   "contributors": [
@@ -24,7 +24,7 @@
   ],
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/watson-developer-cloud/speech-to-text-nodejs/issues"
+    "url": "https://github.com/ssudheen/Watson-Rover/issues"
   },
   "scripts": {
     "start": "node app.js"

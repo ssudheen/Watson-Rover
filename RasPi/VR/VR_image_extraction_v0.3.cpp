@@ -20,7 +20,7 @@ int THRES = 0;
 
 bool is_border(cv::Mat& edge, cv::Vec3b color)
 {
-    
+
     cv::Mat im = edge.clone().reshape(0,1);
     cv::Vec3b colorP;
 
@@ -66,7 +66,7 @@ void autocrop(cv::Mat& src, cv::Mat& dst)
 		printf("BL Ref color: B = %d, G = %d, R = %d\n",colorBL[0],colorBL[1],colorBL[2]);
 		printf("BR Ref color: B = %d, G = %d, R = %d\n",colorBR[0],colorBR[1],colorBR[2]);
 	}
-	
+
 	nborder = 4;
     bool next;
 
@@ -120,11 +120,11 @@ int main(int argc, char *argv[])
 {
 	char *inFile;
 	int threshold = 0;
-	
+
 	inFile = argv[1];
 	threshold = atoi(argv[2]);
 	THRES = threshold;
-	
+
     cv::Mat src = cv::imread(inFile);
     if (!src.data)
         return -1;

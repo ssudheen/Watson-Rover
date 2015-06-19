@@ -1,4 +1,4 @@
-// U/S sensor pins 
+// U/S sensor pins
 const int trigPin = 10;
 const int frontEchoPin = 9;
 const int leftEchoPin = 11;
@@ -66,12 +66,12 @@ void reposition(void);
 void fix_alignment(void);
 
 
-void setup() {                
+void setup() {
   // initialize U/S sensor pins
   pinMode(trigPin, OUTPUT);
   pinMode(frontEchoPin, INPUT);
   pinMode(leftEchoPin, INPUT);
-  pinMode(rightEchoPin, INPUT);  
+  pinMode(rightEchoPin, INPUT);
 
   // initiatlize motor control pins
   pinMode(M1forward, OUTPUT);
@@ -85,7 +85,7 @@ void setup() {
 
   Serial.begin(9600);
 
-  debug("Initialization complete"); 
+  debug("Initialization complete");
 }
 
 void loop() {
@@ -116,7 +116,7 @@ void loop() {
           rpiResponse = get_response();
           if (rpiResponse == 9) startFlag = true;
         }*/
-        
+
         distFront = measure_front_distance();
         if (DEBUG) {
           Serial.print("Received distance = ");
@@ -148,7 +148,7 @@ void loop() {
 		} else if (rpiResponse == 8) {
                       reverse(2);
                 }
-         } 
+         }
          else if (distFront <= 2) {
            if (distFront == 1) reverse(2);
            else {
@@ -158,29 +158,29 @@ void loop() {
                  if (rpiResponse == 1) {
 	             turn_left(0);
                     compFlag = true;
-	     } 
+	     }
              else if (rpiResponse == 2) {
 	            turn_right(0);
                     compFlag = true;
-	     } 
+	     }
              else if (rpiResponse == 8) {
                     reverse(1);
                     compFlag = true;
-             } 
+             }
              else if (rpiResponse == 9) {
                     reverse(2);
 		    // keep waiting for further instructions - this was done for VR; maybe not needed anymore
                     compFlag = false;
-             } 
+             }
              else if (rpiResponse == 5) {
 		    turn_left(3);
 		    compFlag = true;
-             } 
+             }
              else if (rpiResponse == 6) {
 		    turn_right(3);
 		    compFlag = true;
              }
-           }  
+           }
            // reset completion flag
            compFlag = false;
           }
@@ -189,7 +189,7 @@ void loop() {
 } // end of loop
 
 // Prepare JSON message and send to RPi
-void send_rpi(int stat) 
+void send_rpi(int stat)
 {
     sprintf(jsonMsg, "%d\n", stat);
     Serial.print(jsonMsg);
@@ -221,9 +221,9 @@ void move_forward (void)
                   analogWrite(M1pwm, FAST);
 		  analogWrite(M2pwm, FAST);
                   delay(TDELAY/5);
-                
-                } 
-                else { 
+
+                }
+                else {
                   analogWrite(M1pwm, FAST);
 		  analogWrite(M2pwm, FAST);
 		  newDistance = measure_front_distance();
@@ -234,7 +234,7 @@ void move_forward (void)
                         //delay(100);
                         distRight=(float)measure_right_distance();
                         distLeft=(float)measure_left_distance();
-                        
+
                         // below two parameters are critical for navigation
                         ratio = distRight/distLeft;
                         totalDist = distRight + distLeft;
@@ -334,7 +334,7 @@ void turn_left(int mode)
 		// fine tune this delay eventually for accurate 90 degree turn
 		delay((TDELAY/4));
 		analogWrite(M2pwm, STOP);
-	} 
+	}
         else if (mode == 1) {
 		// hunt mode; turn a bit
 		analogWrite(M1pwm, STOP);
@@ -342,7 +342,7 @@ void turn_left(int mode)
 		// fine tune this delay eventually for required accuracy
 		delay((TDELAY/15));
 		analogWrite(M2pwm, STOP);
-	} 
+	}
         else if (mode == 2) {
                 // hunt mode; turn a bit
 		analogWrite(M1pwm, STOP);
@@ -392,14 +392,14 @@ void turn_right(int mode)
 		delay(TDELAY/4);
 		analogWrite(M1pwm, STOP);
 	} else if (mode == 1) {
-		// hunt mode; turn a bit 
+		// hunt mode; turn a bit
 		analogWrite(M1pwm, SLOW);
 		analogWrite(M2pwm, STOP);
 		// fine tune this delay eventually for accurate required accuracy
 		delay(TDELAY/22);
 		analogWrite(M1pwm, STOP);
 	} else if (mode == 2) {
-                // hunt mode; turn a bit more and straighten 
+                // hunt mode; turn a bit more and straighten
 		analogWrite(M1pwm, SLOW);
 		analogWrite(M2pwm, STOP);
 		// fine tune this delay eventually for accurate required accuracy
@@ -409,7 +409,7 @@ void turn_right(int mode)
                 delay(TDELAY/10);
 		analogWrite(M2pwm, STOP);
         } else if (mode == 3) {
-                // hunt mode; turn a bit 
+                // hunt mode; turn a bit
 		analogWrite(M1pwm, SLOW);
 		analogWrite(M2pwm, STOP);
 		// fine tune this delay eventually for accurate required accuracy
