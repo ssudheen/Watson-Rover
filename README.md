@@ -2,7 +2,7 @@
 
   IOT/Rover code for the Watson Rover Project developed for the GBS Watson challenge
 
-  More info: [video](#not-available-yet)
+  More info: [video](https://vimeo.com/ibmwatson/review/130135196/ededb6b90f)
 
 ## Overview
   ![deploy](/documentation/design1.png)
