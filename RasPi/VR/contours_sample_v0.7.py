@@ -4,15 +4,15 @@ import numpy as np
 import cv2
 
 if __name__ == '__main__':
-    print __doc__
+    print(__doc__)
 
     img = cv2.imread('vrImg.jpg')
     img_copy = img.copy()
     # prepare image; convert to gray scale and perform adaptive thresholding
     gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    gray_img = cv2.GaussianBlur(gray_img, (5,5), 0)
-    thres_img = cv2.adaptiveThreshold(gray_img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
-            cv2.THRESH_BINARY,11,2)
+    gray_img = cv2.GaussianBlur(gray_img, (5, 5), 0)
+    thres_img = cv2.adaptiveThreshold(gray_img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+            cv2.THRESH_BINARY, 11, 2)
     thres_img = cv2.bilateralFilter(thres_img, 11, 17, 17)
     thres_img = cv2.Canny(thres_img, 30, 200)
     cv2.imwrite('thres_img.jpg', thres_img)
@@ -31,17 +31,16 @@ if __name__ == '__main__':
 		area = cv2.contourArea(cnt)
 		peri = cv2.arcLength(cnt, True)
 		sides = len(cnt)
-		s = "sides = " + str(sides) + "; area = " + str(area) + "; peri = " + str(peri)
-		print s
+		print("sides = {}; area = {}; peri = {}".format(sides, area, peri))
 		screenCnt = cnt
 		if sides == 4:
 			screenCnt = cnt
 			break
     if screenCnt == None:
-		print "not found"
+		print("not found")
 		exit -1
 
-    print "found"
+    print("found")
     cv2.drawContours(img, screenCnt, -1, (0,255,0), 5)
     cv2.imwrite('contour_outline.jpg', img)
 	# bind the identified contour with rectangle and crop the input image
@@ -58,6 +57,8 @@ if __name__ == '__main__':
     diff = np.diff(pts, axis = 1)
     rect[1] = pts[np.argmin(diff)]
     rect[3] = pts[np.argmax(diff)]
+    # why not just write?
+    # rect = pts[np.argmin(s)], pts[np.argmin(diff)], pts[np.argmax(s)], pts[np.argmax(diff)]
 
     # identify size of target image - calculate maximum width and height
     (tl, tr, br, bl) = rect
@@ -91,5 +92,5 @@ if __name__ == '__main__':
     left_img = warp[ymin:ymax, xminl:xmaxl]
     right_img = warp[ymin:ymax, xminr:xmaxr]
 
-    cv2.imwrite('left_p.jpg',left_img)
+    cv2.imwrite('left_p.jpg', left_img)
     cv2.imwrite('right_p.jpg', right_img)
