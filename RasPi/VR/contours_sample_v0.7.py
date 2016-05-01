@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-import numpy as np
 import cv2
+import numpy as np
 
 if __name__ == '__main__':
     print(__doc__)
@@ -11,16 +11,17 @@ if __name__ == '__main__':
     # prepare image; convert to gray scale and perform adaptive thresholding
     gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     gray_img = cv2.GaussianBlur(gray_img, (5, 5), 0)
-    thres_img = cv2.adaptiveThreshold(gray_img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-            cv2.THRESH_BINARY, 11, 2)
+    thres_img = cv2.adaptiveThreshold(gray_img, 255,
+                cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
     thres_img = cv2.bilateralFilter(thres_img, 11, 17, 17)
     thres_img = cv2.Canny(thres_img, 30, 200)
     cv2.imwrite('thres_img.jpg', thres_img)
 
     h, w = thres_img.shape[:2]
 
-	# identify contours
-    contours0, hierarchy = cv2.findContours( thres_img.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_TC89_L1)
+    # identify contours
+    contours0, hierarchy = cv2.findContours(thres_img.copy(), cv2.RETR_TREE,
+                                            cv2.CHAIN_APPROX_TC89_L1)
     # approximate polygone on contours
     contours = [cv2.approxPolyDP(cnt, 3, True) for cnt in contours0]
     # reverse sort based on contour area
@@ -28,37 +29,38 @@ if __name__ == '__main__':
 
     screenCnt = None
     for cnt in contours:
-		area = cv2.contourArea(cnt)
-		peri = cv2.arcLength(cnt, True)
-		sides = len(cnt)
-		print("sides = {}; area = {}; peri = {}".format(sides, area, peri))
-		screenCnt = cnt
-		if sides == 4:
-			screenCnt = cnt
-			break
-    if screenCnt == None:
-		print("not found")
-		exit -1
+        area = cv2.contourArea(cnt)
+        peri = cv2.arcLength(cnt, True)
+        sides = len(cnt)
+        print("sides = {}; area = {}; peri = {}".format(sides, area, peri))
+        screenCnt = cnt
+        if sides == 4:
+            screenCnt = cnt
+            break
+    if not screenCnt:
+        print("not found")
+        exit(-1)
 
     print("found")
-    cv2.drawContours(img, screenCnt, -1, (0,255,0), 5)
+    cv2.drawContours(img, screenCnt, -1, (0, 255, 0), 5)
     cv2.imwrite('contour_outline.jpg', img)
-	# bind the identified contour with rectangle and crop the input image
-    x,y,w,h = cv2.boundingRect(screenCnt)
+    # bind the identified contour with rectangle and crop the input image
+    x, y, w, h = cv2.boundingRect(screenCnt)
     crop_img = img[y:y+h, x:x+w]
     cv2.imwrite('crop_img.jpg', crop_img)
     # prepare for removing image skew
     pts = screenCnt.reshape(4, 2)
-    rect = np.zeros((4, 2), dtype = "float32")
-    s = pts.sum(axis = 1)
+    rect = np.zeros((4, 2), dtype="float32")
+    s = pts.sum(axis=1)
     # identify four corners of contour
     rect[0] = pts[np.argmin(s)]
     rect[2] = pts[np.argmax(s)]
-    diff = np.diff(pts, axis = 1)
+    diff = np.diff(pts, axis=1)
     rect[1] = pts[np.argmin(diff)]
     rect[3] = pts[np.argmax(diff)]
     # why not just write?
-    # rect = pts[np.argmin(s)], pts[np.argmin(diff)], pts[np.argmax(s)], pts[np.argmax(diff)]
+    # rect = (pts[np.argmin(s)], pts[np.argmin(diff)],
+    #         pts[np.argmax(s)], pts[np.argmax(diff)])
 
     # identify size of target image - calculate maximum width and height
     (tl, tr, br, bl) = rect
@@ -70,17 +72,15 @@ if __name__ == '__main__':
     maxW = max(int(widthA), int(widthB))
     maxH = max(int(heightA), int(heightB))
 
-    dst = np.array([[0,0],
-		[maxW-1,0],
-		[maxW-1,maxH-1],
-		[0,maxH-1]], dtype="float32")
+    dst = np.array([[0, 0], [maxW-1, 0], [maxW-1, maxH-1], [0, maxH-1]],
+                   dtype="float32")
 
-	# fix perspective warp
+    # fix perspective warp
     M = cv2.getPerspectiveTransform(rect, dst)
     warp = cv2.warpPerspective(img, M, (maxW, maxH))
     cv2.imwrite('final_op.jpg', warp)
 
-	# extract left and right images
+    # extract left and right images
 
     ymax = 0.95 * maxH
     ymin = 0.05 * maxH
